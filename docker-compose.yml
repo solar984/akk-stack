@@ -16,7 +16,9 @@ services:
 
   eqemu-server:
     restart: unless-stopped
-    image: akkadius/eqemu-server:v16
+    #image: akkadius/eqemu-server:v16
+    build:
+      context: ./containers/eqemu-server
     volumes:
       - ./server:/home/eqemu/server:delegated
       - ./code:/home/eqemu/code:delegated
@@ -106,11 +108,8 @@ services:
       - NET_ADMIN
       - NET_RAW
     environment:
-      - F2B_LOG_LEVE=DEBUG
+      - F2B_LOG_LEVEL=DEBUG
       - F2B_DB_PURGE_AGE=30d
-      - F2B_MAX_RETRY=3
-      - F2B_ACTION=%(action_)s
-      - F2B_IPTABLES_CHAIN=DOCKER-USER
       - TZ=${TZ:-US/Central}
     volumes:
       - /etc/localtime:/etc/localtime:ro
