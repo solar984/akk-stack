@@ -17,7 +17,8 @@ services:
   eqemu-server:
     hostname: ${SERVER_HOSTNAME:-}
     restart: unless-stopped
-    image: akkadius/eqemu-server:v16
+    build:
+      context: ./containers/eqemu-server
     volumes:
       - ./server:/home/eqemu/server:delegated
       - ./code:/home/eqemu/code:delegated
@@ -180,7 +181,8 @@ services:
   peq-editor:
     depends_on:
       - peq-editor-proxy
-    image: akkadius/peq-editor:latest
+    build:
+      context: containers/peq-editor
     restart: unless-stopped
     volumes:
       - ${DATA_PATH_HOST}/peq-editor:/var/www/html
@@ -224,7 +226,6 @@ services:
 
   backup-cron:
     restart: unless-stopped
-    image: akkadius/eqemu-backup-cron:latest
     build:
       context: ./containers/backup-cron
     hostname: backup-cron
@@ -232,7 +233,7 @@ services:
     volumes:
       - ./:/home/backup-cron/
     environment:
-      TZ: America/Chicago
+      TZ: ${TZ:-US/Central}
     #      HOST_NAME: ${HOSTNAME:-default}
     #      HOST_DIR: ${PWD}
     networks:

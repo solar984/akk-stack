@@ -28,7 +28,7 @@ ifeq ("$(ENV)", "development")
 	DOCKER_COMPOSE_CONTEXT = -f docker-compose.yml -f docker-compose.dev.yml
 endif
 
-DOCKER=docker-compose $(DOCKER_COMPOSE_CONTEXT)
+DOCKER=docker compose $(DOCKER_COMPOSE_CONTEXT)
 
 #----------------------
 # Terminal
@@ -114,9 +114,8 @@ install: ##@init Install full application port-range-high=[] ip-address=[]
 	$(DOCKER) pull
 	@assets/scripts/env-set-var.pl IP_ADDRESS $(IN_IP_ADDRESS)
 	@assets/scripts/env-set-var.pl PORT_RANGE_HIGH $(IN_PORT_RANGE_HIGH)
-	$(DOCKER) build mariadb fail2ban-server fail2ban-mysqld
+	$(DOCKER) build mariadb fail2ban-server fail2ban-mysqld eqemu-server
 	make up detached
-	@assets/scripts/env-set-var.pl
 	$(DOCKER) exec mariadb bash -c 'while ! mysqladmin status -uroot -p${MARIADB_ROOT_PASSWORD} -h "localhost" --silent; do sleep .5; done; sleep 5'
 	make init-strip-mysql-remote-root
 	$(DOCKER) exec eqemu-server bash -c "make install"

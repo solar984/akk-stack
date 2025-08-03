@@ -13,6 +13,6 @@ enabled  = true
 port     = 22
 filter   = sshd
 logpath  = /eqemu/var/log/auth.log
-maxretry = 2
+maxretry = 10
 protocol = tcp
 chain    = DOCKER-USER

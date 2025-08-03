@@ -10,10 +10,10 @@ ENV PUID=${PUID}
 ARG PGID=1000
 ENV PGID=${PGID}
 
-ENV TZ=US/Central
+ENV TZ=${TZ:-US/Central}
 
-ENV CC=/usr/bin/clang
-ENV CXX=/usr/bin/clang++
+ENV CC=${CC:-/usr/bin/clang}
+ENV CXX=${CXX:-/usr/bin/clang++}
 
 RUN apt-get update -yqq && \
     groupadd -g ${PGID} eqemu && \
@@ -93,12 +93,11 @@ RUN chsh -s /bin/bash eqemu
 #############################################
 # install eqemu-perl
 #############################################
+# from https://github.com/Perl/perl5/archive/refs/tags/v5.32.1.tar.gz
+COPY perl5-5.32.1.tar.gz /tmp/perl.tar.gz
 RUN mkdir -p /opt/eqemu-perl && \
 	mkdir -p /tmp/eqemu-perl && \
 	chown eqemu:eqemu /opt/eqemu-perl -R && \
-    # downloading from github this way is slow, so we pull from a release
-	# cd /tmp && wget -q https://github.com/Perl/perl5/archive/refs/tags/v5.32.1.tar.gz -O perl.tar.gz && \
-	cd /tmp && wget -q https://github.com/EQEmu/Server/releases/download/v1.2/perl5-5.32.1.tar.gz -O perl.tar.gz && \
 	cd /tmp && tar -xzf perl.tar.gz --strip-components=1 -C /tmp/eqemu-perl && \
 	cd /tmp/eqemu-perl && ./Configure -des -Dprefix=/opt/eqemu-perl -Dusethreads -Dusemultiplicity -Duse64bitall -Dnoextensions -Duseshrplib 1> /dev/null && \
 	cd /tmp/eqemu-perl && make -j$(nproc) 1> /dev/null && \
