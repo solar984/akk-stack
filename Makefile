@@ -28,7 +28,7 @@ ifeq ("$(ENV)", "development")
 	DOCKER_COMPOSE_CONTEXT = -f docker-compose.yml -f docker-compose.dev.yml
 endif
 
-DOCKER=docker-compose $(DOCKER_COMPOSE_CONTEXT)
+DOCKER=docker compose $(DOCKER_COMPOSE_CONTEXT)
 
 #----------------------
 # Terminal

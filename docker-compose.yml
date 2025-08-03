@@ -16,7 +16,6 @@ services:
 
   eqemu-server:
     restart: unless-stopped
-    #image: akkadius/eqemu-server:v16
     build:
       context: ./containers/eqemu-server
     volumes:
