@@ -32,14 +32,18 @@ if (-e $filename) {
             if ($fields_to_scramble{$key}) {
                 my $new_hash = hash();
 
-                if ($ARGV[0] && $ARGV[0] ne $key) {
+                if ($ARGV[0] && $ARGV[0] ne $key && $ARGV[0] ne "force") {
                     $write = 0;
                 }
+                my $force = 0;
+                if ($ARGV[1] && $ARGV[1] eq "force" || $ARGV[0] && $ARGV[0] eq "force") {
+                    $force = 1;
+                }
 
-                if (defined $write && $write == 1 && $value eq "<template>") {
+                if (defined $write && $write == 1 && ($value eq "<template>" || $force == 1)) {
                     print "Scrambling [$key]\n";
                     $row =~ s/$value/$new_hash/g;
-                } elsif ($value ne "<template>") {
+                } elsif (defined $write && $write == 1 && $value ne "<template>") {
                     print "Skipping [$key] because it was already set\n";
                 }
             }

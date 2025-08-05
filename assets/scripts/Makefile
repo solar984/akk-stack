@@ -58,7 +58,7 @@ install: ##@init Install full application
 	@make pull-eqemu-code
 	@make pull-peq-quests
 	@make pull-maps
-	@make init-build
+	@make init-dev-build
 	@~/assets/scripts/create-symlinks.pl
 	@make init-eqemu-admin-assets
 	@make init-eqemu-admin
@@ -73,7 +73,7 @@ ifeq ("$(SPIRE_DEV)", "true")
 endif
 
 init-spire-dev: ##@init Initialize Spire for development
-	git -C ~/server/spire pull 2> /dev/null || git clone https://github.com/akkadius/spire ~/server/spire
+	git -C ~/server/spire pull 2> /dev/null || git clone ${GH_SPIRE_URL} ~/server/spire
 	cd ~/server/spire && cp .env.dev .env
 	cd ~/server/spire && go get
 	cd ~/server/spire/frontend && npm install
@@ -87,6 +87,7 @@ init-eqemu-config: ##@init Bootstraps eqemu config
 	@make pull-docker-config
 	@cat ~/server/eqemu_config.json \
              | jq --arg dbpass "$(EQEMU_DB_PASSWORD)" '.server.database.password = $$dbpass' \
+             | jq --arg dbpass "$(EQEMU_DB_PASSWORD)" '.server.qsdatabase.password = $$dbpass' \
              | jq --arg ipaddr "$(IP_ADDRESS)" '.server.world.address = $$ipaddr | .server.ucs.host = $$ipaddr' \
              | jq --arg porthigh "$(PORT_RANGE_HIGH)" '.server.zones.ports.high = $$porthigh' \
              | jq --arg random_string "$$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32)" '.server.world.key = $$random_string' \
@@ -107,7 +108,7 @@ init-directories: ##@init Bootstrap directories
 
 init-peq-database: ##@init Sources fresh PEQ database (Warning: Will over-write existing)
 	@./assets/scripts/banner.pl "Bootstrapping PEQ Database"
-	curl http://db.projecteq.net/api/v1/dump/latest -o /tmp/db.zip
+	curl ${DB_DUMP_URL} -o /tmp/db.zip
 	unzip -o /tmp/db.zip -d /tmp/db/
 	cd /tmp/db/peq-dump/ && mysql -u$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.username') \
 		-p$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.password') \
@@ -172,7 +173,6 @@ init-eqemu-admin: ##@init Initializes EQEmu Admin
 		| jq '.["web-admin"].launcher.staticZones = "butcher,erudnext,freporte,qeynos,freeporte,oot,iceclad,nro,oasis,nedaria,abysmal,natimbi,timorous,abysmal,firiona,overthere"' \
 		-M > /tmp/config.json && mv /tmp/config.json ~/server/eqemu_config.json && rm -f /tmp/config.json
 	cd ~/server && ./bin/spire spire:init admin ${ADMIN_PASSWORD} || echo "Already initialized"
-	cd ~/server && ./bin/spire spire:occulus-update
 
 init-eqemu-admin-dev: ##@init Initializes EQEmu Admin (Development)
 	cd ~/server && if cd eqemu-web-admin 2> /dev/null; then git pull; else git clone https://github.com/Akkadius/eqemu-web-admin; fi
@@ -181,7 +181,7 @@ init-eqemu-admin-dev: ##@init Initializes EQEmu Admin (Development)
 	cd ~/server/eqemu-web-admin/frontend && npm install
 
 init-peq-editor: ##@init Initializes PEQ Editor DB tables
-	@wget --quiet https://raw.githubusercontent.com/ProjectEQ/peqphpeditor/master/sql/schema.sql -O /tmp/schema.sql
+	@wget --quiet ${GH_PEQPHPEDITOR_SCHEMA_URL} -O /tmp/schema.sql
 	@mysql -u$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.username') \
     		-p$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.password') \
     		-h $(shell ~/assets/scripts/init/get-config-var.sh '.server.database.host') \
@@ -195,7 +195,7 @@ init-set-perms: ##@init Sets permissions recursively
 	find ~/ -not -user eqemu -execdir sudo chown eqemu:eqemu {} \+
 
 init-server-binaries: ##@init Initializes server binaries
-	cd ~/server && ./bin/spire eqemu-server:update --release-binaries=true --auto=true
+	cd ~/server && ./bin/spire eqemu-server:update --compile-server=true --compile-build-location=/home/eqemu/code/build --auto=true
 
 init-perl: ##@init Initializes perl - compiles perl from source to /opt/eqemu-perl
 	@./assets/scripts/banner.pl "Initializing Perl"
@@ -228,24 +228,19 @@ init-perl: ##@init Initializes perl - compiles perl from source to /opt/eqemu-pe
 
 pull-maps: ##@assets Pulls maps
 	@./assets/scripts/banner.pl "Pulling latest EQEmu Maps"
-	@if [ $(shell find ~/server/maps | wc -l) -gt 10 ] ; then \
-		echo "maps is initialized"; \
-	else \
-		echo "maps is not initialized"; \
-		cd server && wget --progress=bar:force:noscroll https://github.com/Akkadius/eqemu-maps/releases/latest/download/maps.zip -O /tmp/maps.zip && unzip -o /tmp/maps.zip -d ~/server/maps && rm /tmp/maps.zip || true; \
-	fi
+	cd ~/server && git -C ./maps pull 2> /dev/null || git clone ${GH_MAPS_URL} maps;
 
 pull-eqemu-code: ##@assets Pulls eqemu code
 	@./assets/scripts/banner.pl "Pulling EQEmu Source Code into [./code]"
-	git -C ./code pull 2> /dev/null || git clone https://github.com/EQEmu/Server.git code
+	cd ~ && git -C ./code pull 2> /dev/null || git clone ${GH_EQEMU_URL} -b ${GH_EQEMU_BRANCH} code
 
 pull-peq-quests: ##@assets Pulls ProjectEQ quests
 	@./assets/scripts/banner.pl "Pulling Latest ProjectEQ Quests"
-	cd ~/server && git -C ./quests pull 2> /dev/null || git clone https://github.com/ProjectEQ/projecteqquests.git quests
+	cd ~/server && git -C ./quests pull 2> /dev/null || git clone ${GH_QUESTS_URL} quests
 
 pull-docker-config: ##@assets Pulls default eqemu_config.json
 	@./assets/scripts/banner.pl "Bootstrapping default [eqemu_config.json]"
-	cd ~/server && wget --progress=bar:force:noscroll --no-cache --no-check-certificate --no-cookies https://raw.githubusercontent.com/Akkadius/eqemu-install-v2/master/eqemu_config_docker.json -O eqemu_config.json
+	cd ~/server && cp ~/assets/eqemu_config_docker.json eqemu_config.json
 
 #----------------------
 # mgmt

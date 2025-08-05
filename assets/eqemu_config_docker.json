@@ -1,0 +1,85 @@
+{
+  "server": {
+    "database": {
+      "db": "peq",
+      "host": "mariadb",
+      "port": "3306",
+      "username": "eqemu",
+      "password": "eqemu"
+    },
+    "qsdatabase": {
+      "host": "mariadb",
+      "port": "3306",
+      "username": "eqemu",
+      "password": "eqemu",
+      "db": "peq"
+    },
+    "zones": {
+      "defaultstatus": "0",
+      "ports": {
+        "low": "7000",
+        "high": "7400"
+      }
+    },
+    "ucs": {
+      "port": "7778",
+      "host": ""
+    },
+    "world": {
+      "loginserver1": {
+        "port": "5998",
+        "account": "",
+        "password": "",
+        "host": "127.0.0.1"
+      },
+      "loginserver2": {
+        "account": "",
+        "password": "",
+        "legacy": "1",
+        "host": "login.eqemulator.net",
+        "port": "5998"
+      },
+      "loginserver3": {
+        "port": "5998",
+        "account": "",
+        "password": "",
+        "host": "login.projecteq.net"
+      },
+      "tcp": {
+        "ip": "0.0.0.0",
+        "port": "9001"
+      },
+      "telnet": {
+        "ip": "0.0.0.0",
+        "port": "9000",
+        "enabled": "true"
+      },
+      "key": "somelongrandomstring12345asdfffff",
+      "shortname": "eqemu",
+      "longname": "Akkas Docker PEQ Installer",
+      "localaddress": "127.0.0.1"
+    },
+    "files": {
+      "opcodes": "assets/opcodes/opcodes.conf",
+      "mail_opcodes": "assets/opcodes/mail_opcodes.conf"
+    },
+    "directories": {
+      "patches": "assets/patches/",
+      "opcodes": "assets/opcodes/"
+    }
+  },
+  "web-admin": {
+    "launcher": {
+      "runSharedMemory": true,
+      "runLoginserver": false,
+      "runQueryServ": false,
+      "isRunning": true,
+      "minZoneProcesses": 10,
+      "staticZones": "butcher,erudnext,freporte,qeynos,freeporte,oot,iceclad,nro,oasis,nedaria,abysmal,natimbi,timorous,abysmal,firiona,overthere"
+    },
+    "quests": {
+      "hotReload": true
+    },
+    "serverCodePath": "/home/eqemu/code/"
+  }
+}
