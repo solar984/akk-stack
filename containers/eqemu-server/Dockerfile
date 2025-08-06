@@ -127,9 +127,9 @@ RUN /opt/eqemu-perl/bin/cpanm --notest DBI && \
 COPY logrotate.conf /etc/logrotate.d/var-log
 
 # Create a cron job to run logrotate at midnight
-RUN echo "0 0 * * * /usr/sbin/logrotate /etc/logrotate.conf" > /etc/cron.d/logrotate
+RUN echo "0 0 * * * root /usr/sbin/logrotate /etc/logrotate.conf" > /etc/cron.d/logrotate
 
-# Give execute permissions to cron job file
+# Give read permissions to cron job file
 RUN chmod 0644 /etc/cron.d/logrotate
 
 # Ensure cron runs on container start

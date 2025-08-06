@@ -54,7 +54,7 @@ services:
       - IP_ADDRESS=${IP_ADDRESS}
       - PORT_RANGE_HIGH=${PORT_RANGE_HIGH}
       - TZ=${TZ:-US/Central}
-      - DB_DUMP_URL-${DB_DUMP_URL}
+      - DB_DUMP_URL=${DB_DUMP_URL}
       - GH_EQEMU_URL=${GH_EQEMU_URL}
       - GH_EQEMU_BRANCH=${GH_EQEMU_BRANCH}
       - GH_QUESTS_URL=${GH_QUESTS_URL}
