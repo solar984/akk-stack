@@ -36,14 +36,14 @@
         "account": "",
         "password": "",
         "legacy": "1",
-        "host": "login.eqemulator.net",
+        "host": "",
         "port": "5998"
       },
       "loginserver3": {
         "port": "5998",
         "account": "",
         "password": "",
-        "host": "login.projecteq.net"
+        "host": ""
       },
       "tcp": {
         "ip": "0.0.0.0",
@@ -75,7 +75,7 @@
       "runQueryServ": false,
       "isRunning": true,
       "minZoneProcesses": 10,
-      "staticZones": "butcher,erudnext,freporte,qeynos,freeporte,oot,iceclad,nro,oasis,nedaria,abysmal,natimbi,timorous,abysmal,firiona,overthere"
+      "staticZones": "acrylia,airplane,akanon,akheva,arena,bazaar,befallen,beholder,blackburrow,bothunder,burningwood,butcher,cabeast,cabwest,cauldron,cazicthule,charasis,chardok,citymist,clz,cobaltscar,codecay,commons,crushbone,crystal,cshome,dalnir,dawnshroud,dreadlands,droga,eastkarana,eastwastes,echo,ecommons,emeraldjungle,erudnext,erudnint,erudsxing,everfrost,fearplane,feerrott,felwithea,felwitheb,fieldofbone,firiona,freporte,freportn,freportw,frontiermtns,frozenshadow,fungusgrove,gfaydark,greatdivide,griegsend,grimling,grobb,growthplane,gukbottom,guktop,halas,hateplane,highkeep,highpass,hohonora,hohonorb,hole,hollowshade,iceclad,innothule,jaggedpine,kael,kaesora,kaladima,kaladimb,karnor,katta,kedge,kerraridge,kithicor,kurn,lakeofillomen,lakerathe,lavastorm,letalis,lfaydark,maiden,mischiefplane,mistmoore,misty,mseru,najena,necropolis,nektulos,neriaka,neriakb,neriakc,netherbian,nexus,nightmareb,northkarana,nro,nurga,oasis,oggok,oot,overthere,paineel,paludal,paw,permafrost,poair,podisease,poeartha,poearthb,pofire,poinnovation,pojustice,poknowledge,ponightmare,postorms,potactics,potimea,potimeb,potorment,potranquility,povalor,powar,powater,qcat,qey2hh1,qeynos,qeynos2,qeytoqrg,qrg,rathemtn,rivervale,runnyeye,scarlet,sebilis,shadeweaver,shadowhaven,sharvahl,sirens,skyfire,skyshrine,sleeper,soldunga,soldungb,solrotower,soltemple,southkarana,sro,sseru,ssratemple,steamfont,stonebrunt,swampofnohope,templeveeshan,tenebrous,thedeep,thegrey,thurgadina,thurgadinb,timorous,tox,trakanon,twilight,umbral,unrest,veeshan,veksar,velketor,vexthal,wakening,warrens,warslikswood,westwastes"
     },
     "quests": {
       "hotReload": true

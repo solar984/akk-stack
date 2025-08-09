@@ -53,6 +53,7 @@ help: ##@other Show this help.
 #----------------------
 
 install: ##@init Install full application
+	git config --global credential.helper store
 	@make init-directories
 	@make init-eqemu-config
 	@make pull-eqemu-code
@@ -110,11 +111,10 @@ init-peq-database: ##@init Sources fresh PEQ database (Warning: Will over-write 
 	@./assets/scripts/banner.pl "Bootstrapping PEQ Database"
 	curl ${DB_DUMP_URL} -o /tmp/db.zip
 	unzip -o /tmp/db.zip -d /tmp/db/
-	cd /tmp/db/peq-dump/ && mysql -u$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.username') \
+	cd /tmp/db/alkabor_* && cat alkabor_*.sql player_tables_*.sql login_tables_*.sql data_tables_*.sql ~/code/utils/sql/git/required/2025_05_26_Add_Detail_Player_Event_Logging.sql | mysql -u$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.username') \
 		-p$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.password') \
 		-h $(shell ~/assets/scripts/init/get-config-var.sh '.server.database.host') \
-		$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.db') \
-		< ./create_all_tables.sql
+		$(shell ~/assets/scripts/init/get-config-var.sh '.server.database.db')
 	rm -rf /tmp/db/
 	cd ~/server && ./bin/world database:updates
 
