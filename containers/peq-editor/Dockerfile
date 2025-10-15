@@ -1,12 +1,12 @@
 ######################################################
-# 8.1 Apache
+# 8.2 Apache
 ######################################################
 
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
 	libbz2-dev \
-	libc-client-dev \
+#	libc-client-dev \
 	libcurl4-gnutls-dev \
 	libkrb5-dev \
 	libmcrypt-dev \
@@ -43,6 +43,9 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.
     echo "opcache.fast_shutdown=0" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
     echo "opcache.revalidate_freq=600000" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
     echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
+    sed "s/short_open_tag = Off/short_open_tag = On/" < /usr/local/etc/php/php.ini > /usr/local/etc/php/php.ini.tmp && mv /usr/local/etc/php/php.ini.tmp /usr/local/etc/php/php.ini
 
 ######################################################
 # Apache modules
