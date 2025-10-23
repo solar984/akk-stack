@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y \
 	libssl-dev \
 	libxml2-dev \
 	libxslt-dev \
-	git
+	git \
+	libdbi-perl \
+	libdbd-mysql-perl
 
 ######################################################
 # Enable / Compile PHP modules
